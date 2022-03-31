@@ -1,6 +1,12 @@
+let empPayrollList;
 window.addEventListener('DOMContentLoaded',(event) =>{
-
+    
+    empPayrollList = getEmpPayrollDataFromStorage();
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
+
+    localStorage.removeItem('editEmp');
+
 
     const name = document.querySelector('#name');
     const textError = document.querySelector('.text-error');
@@ -49,7 +55,7 @@ const createEmployeePayroll = () =>{
 
     employeePayrollData.profile = getSelectedValues('[name=profile]').pop();
     employeePayrollData.gender = getSelectedValues('[name=gender]').pop();
-    employeePayrollData.department = getSelectedValues('[name=department]');
+    employeePayrollData.department = getSelectedValues('[class=checkbox]');
     employeePayrollData.salary = getInputValueById('#salary');
     employeePayrollData.notes = getInputValueById('#notes');
     let date = getInputValueById('#day')+" "+getInputValueById('#month')+" "+
@@ -99,7 +105,7 @@ const resetForm = () =>{
     setValue ('#name','');
     unsetSelectedValues('[name=profile]');
     unsetSelectedValues('[name=gender]');
-    unsetSelectedValues('[name=department]');
+    unsetSelectedValues('[class=checkbox]');
     setValue('#salary',"40000");
     setValue('#notes','');
     setValue('#day','1');
@@ -128,8 +134,8 @@ const setValue= (id,value) =>{
 const createInnerHtml= () =>{
     
     const headerHtml ="<th></th><th>Name</th><th>Gender</th><th>Department</th><th>Salary</th><th>Start Date</th><th>Actions</th>";
+    if(empPayrollList.length ==0) return;
     let innerHtml = `${headerHtml}`
-    let empPayrollList = createEmployeePayrollJSON();
     for(const empPayrollData of empPayrollList){
          innerHtml=`${innerHtml}
         <tr>
@@ -151,39 +157,39 @@ const createInnerHtml= () =>{
     document.querySelector('#display').innerHTML=innerHtml;
 }
 
-const createEmployeePayrollJSON = () =>{
-    let empPayrollListLocal = [
-        {
-            _name:'Amit Sharma',
-            _gender: 'male',
-            _department:[
-                'Engineering',
-                'HR',
-                'Others'
-            ],
-            _salary:'45000',
-            _startDate:'15 Jan 2021',
-            _notes:'',
-            _id: new Date().getTime(),
-            _profile:'../assets/profile-images/Ellipse -2.png'
-        },
-        {
-            _name:'Raghini Mate',
-            _gender: 'Female',
-            _department:[
-                'Engineering',
-                'HR',
-                'Sales'
-            ],
-            _salary:'25000',
-            _startDate:'15 Oct 2021',
-            _notes:'',
-            _id: new Date().getTime(),
-            _profile:'../assets/profile-images/Ellipse -4.png'
-        }
-    ];
-    return empPayrollListLocal;
-}
+// const createEmployeePayrollJSON = () =>{
+//     let empPayrollListLocal = [
+//         {
+//             _name:'Amit Sharma',
+//             _gender: 'male',
+//             _department:[
+//                 'Engineering',
+//                 'HR',
+//                 'Others'
+//             ],
+//             _salary:'45000',
+//             _startDate:'15 Jan 2021',
+//             _notes:'',
+//             _id: new Date().getTime(),
+//             _profile:'../assets/profile-images/Ellipse -2.png'
+//         },
+//         {
+//             _name:'Raghini Mate',
+//             _gender: 'Female',
+//             _department:[
+//                 'Engineering',
+//                 'HR',
+//                 'Sales'
+//             ],
+//             _salary:'25000',
+//             _startDate:'15 Oct 2021',
+//             _notes:'',
+//             _id: new Date().getTime(),
+//             _profile:'../assets/profile-images/Ellipse -4.png'
+//         }
+//     ];
+//     return empPayrollListLocal;
+// }
 
 const getdeptHtml =(depttList) => {
     let deptHtml = '';
@@ -191,6 +197,11 @@ const getdeptHtml =(depttList) => {
         deptHtml = `${deptHtml}<div class= 'dept-label'>${dept}</div>`
     }
     return deptHtml;
+}
+
+const getEmpPayrollDataFromStorage = () =>{
+    return localStorage.getItem('EmployeePayrollList') ?
+                        JSON.parse(localStorage.getItem('EmployeePayrollList')):[];
 }
 
 
