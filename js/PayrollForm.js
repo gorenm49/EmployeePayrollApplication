@@ -2,36 +2,9 @@ let empPayrollList;
 window.addEventListener('DOMContentLoaded',(event) =>{
     
     empPayrollList = getEmpPayrollDataFromStorage();
-    document.querySelector(".emp-count").textContent = empPayrollList.length;
     createInnerHtml();
 
     localStorage.removeItem('editEmp');
-
-
-    const name = document.querySelector('#name');
-    const textError = document.querySelector('.text-error');
-    name.addEventListener('input',function(){
-        if(name.value.length == 0){
-            textError.textContent = "";
-            return;
-        }
-        try{
-            (new EmployeePayrollData()).name = name.value;
-            textError.textContent="";
-        }
-        catch(ex){
-            textError.textContent=ex;
-        }
-    });
-
-    const salary = document.querySelector('#salary');
-    const output = document.querySelector('.salary-output');
-    output.textContent = salary.value;
-    salary.addEventListener('input',function(){
-        output.textContent = salary.value;
-    });
-
-    
 });
 
 const save = () => {
@@ -148,48 +121,14 @@ const createInnerHtml= () =>{
             <td>${empPayrollData._salary}</td>
             <td>${empPayrollData._startDate}</td>
             <td>
-                <img name="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
-                <img name="${empPayrollData._id}" onclick="uodate(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
+                <img id="${empPayrollData._id}" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
+                <img id="${empPayrollData._id}" onclick="uodate(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
             </td>
         </tr>
         `;
     }
     document.querySelector('#display').innerHTML=innerHtml;
 }
-
-// const createEmployeePayrollJSON = () =>{
-//     let empPayrollListLocal = [
-//         {
-//             _name:'Amit Sharma',
-//             _gender: 'male',
-//             _department:[
-//                 'Engineering',
-//                 'HR',
-//                 'Others'
-//             ],
-//             _salary:'45000',
-//             _startDate:'15 Jan 2021',
-//             _notes:'',
-//             _id: new Date().getTime(),
-//             _profile:'../assets/profile-images/Ellipse -2.png'
-//         },
-//         {
-//             _name:'Raghini Mate',
-//             _gender: 'Female',
-//             _department:[
-//                 'Engineering',
-//                 'HR',
-//                 'Sales'
-//             ],
-//             _salary:'25000',
-//             _startDate:'15 Oct 2021',
-//             _notes:'',
-//             _id: new Date().getTime(),
-//             _profile:'../assets/profile-images/Ellipse -4.png'
-//         }
-//     ];
-//     return empPayrollListLocal;
-// }
 
 const getdeptHtml =(depttList) => {
     let deptHtml = '';
@@ -204,8 +143,18 @@ const getEmpPayrollDataFromStorage = () =>{
                         JSON.parse(localStorage.getItem('EmployeePayrollList')):[];
 }
 
-
-
+const remove = (node) =>{
+    let empPayrollData = empPayrollList.find(empData => empData._id == node._id);
+    if(!empPayrollData) return;
+    const index = empPayrollList
+                .map(empData => empData._id)
+                .indexOf(empPayrollData._id);
+    
+    empPayrollList.splice(index,1);
+    localStorage.setItem("EmployeePayrollList",JSON.stringify(empPayrollList));
+    document.querySelector(".emp-count").textContent = empPayrollList.length;
+    createInnerHtml();
+}
 
 
 
