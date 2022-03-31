@@ -1,4 +1,7 @@
 window.addEventListener('DOMContentLoaded',(event) =>{
+
+    createInnerHtml();
+
     const name = document.querySelector('#name');
     const textError = document.querySelector('.text-error');
     name.addEventListener('input',function(){
@@ -21,6 +24,8 @@ window.addEventListener('DOMContentLoaded',(event) =>{
     salary.addEventListener('input',function(){
         output.textContent = salary.value;
     });
+
+    
 });
 
 const save = () => {
@@ -119,6 +124,38 @@ const setValue= (id,value) =>{
     const element = document.querySelector(id);
     element.value = value;
 }
+
+const createInnerHtml= () =>{
+    const innerHtml=`
+    <tr>
+        <th></th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Department</th>
+        <th>Salary</th>
+        <th>Start Date</th>
+        <th>Actions</th>
+    </tr>
+    <tr>
+        <td>
+            <img class="profile" src="../assets/profile-images/Ellipse -2.png" alt="">
+        </td>
+        <td>Amit Sharma</td>
+        <td>Male</td>
+        <td><div class="dept-label">Engineer</div>
+        <div class="dept-label">HR</div>
+        </td>
+        <td>30000</td>
+        <td>1 Feb 2021</td>
+        <td>
+            <img id="1" onclick="remove(this)" src="../assets/icons/delete-black-18dp.svg" alt="delete">
+            <img id="1" onclick="uodate(this)" src="../assets/icons/create-black-18dp.svg" alt="edit">
+        </td>
+    </tr>
+    `;
+    document.querySelector('#display').innerHTML=innerHtml;
+}
+
 
 
 
